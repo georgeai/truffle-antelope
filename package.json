@@ -2,8 +2,10 @@
   "dependencies": {},
   "devDependencies": {
     "concurrently": "^6.0.0",
+    "eth-gas-reporter": "^0.2.22",
     "ethlint": "^1.2.5",
-    "truffle-hdwallet-provider": "^1.0.17"
+    "truffle-hdwallet-provider": "^1.0.17",
+    "truffle-test-utils": "^0.1.0"
   },
   "scripts": {
     "ganache": "ganache-cli --networkId $npm_package_config_ganache_networkId --allowUnlimitedContractSize --gasLimit $npm_package_config_ganache_gasLimit --gasPrice $npm_package_config_ganache_gasPrice --mnemonic \"$MNEMONIC\" -h 0.0.0.0",
