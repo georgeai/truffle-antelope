@@ -24,6 +24,20 @@
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
 
+var HDWalletProvider = require('truffle-hdwallet-provider');
+// environment variables not set in the package config
+var infuraProjectId = process.env.INFURA_PROJECT_ID;
+var mnemonic = process.env.MNEMONIC;
+
+// naive environment assertions, since these aren't present by default
+if (infuraProjectId === undefined || infuraProjectId === '') {
+    throw new Error('truffle-config.js needs the environment variable "INFURA_PROJECT_ID"');
+} else if (mnemonic === undefined) {
+    throw new Error('truffle-config.js needs the environment variable "MNEMONIC"');
+} else if (mnemonic.split(' ').length != 12) {
+    throw new Error('The environment variable "MNEMONIC" must be 12 words (space delineated)');
+}
+
 // environment variables set in the package config
 var networkId = process.env.npm_package_config_ganache_networkId;
 var gasPrice = process.env.npm_package_config_ganache_gasPrice;
@@ -49,7 +63,36 @@ module.exports = {
             network_id: networkId,
             gas: gasLimit,
             gasPrice: gasPrice
+        },
+        kovan: {
+            provider: () =>
+                new HDWalletProvider(mnemonic, `https://kovan.infura.io/v3/${infuraProjectId}`),
+            network_id: 42, // Kovan Id
+            gas: 3000000,
+            gasPrice: 100000000000
+        },
+        rinkeby: {
+            provider: () =>
+                new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/${infuraProjectId}`),
+            network_id: 4, // Rinkeby Id
+            gas: 3000000,
+            gasPrice: 100000000000
+        },
+        ropsten: {
+            provider: () =>
+                new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/${infuraProjectId}`),
+            network_id: 3, // Ropsten Id
+            gas: 3000000,
+            gasPrice: 100000000000
+        },
+        live: {
+            provider: () =>
+                new HDWalletProvider(mnemonic, `https://mainnet.infura.io/v3/${infuraProjectId}`),
+            network_id: 1, // Mainnet Id
+            gas: 4000000,
+            gasPrice: 100000000000
         }
+        
     // Useful for testing. The `development` name is special - truffle uses it by default
     // if it's defined here and no other network is specified at the command line.
     // You should run a client (like ganache-cli, geth or parity) in a separate terminal
@@ -90,7 +133,11 @@ module.exports = {
 
   // Set default mocha options here, use special reporters etc.
   mocha: {
-    // timeout: 100000
+        reporter: 'eth-gas-reporter',
+        reporterOptions : {
+            currency: 'USD',
+            gasPrice: 2
+        }
   },
 
   // Configure your compilers

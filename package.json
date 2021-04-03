@@ -1,15 +1,22 @@
 {
-  "dependencies": {
-    "truffle": "^5.3.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "concurrently": "^6.0.0",
-    "ganache-cli": "^6.12.2"
+    "ethlint": "^1.2.5",
+    "truffle-hdwallet-provider": "^1.0.17"
   },
   "scripts": {
     "ganache": "ganache-cli --networkId $npm_package_config_ganache_networkId --allowUnlimitedContractSize --gasLimit $npm_package_config_ganache_gasLimit --gasPrice $npm_package_config_ganache_gasPrice --mnemonic \"$MNEMONIC\" -h 0.0.0.0",
     "start": "concurrently \"MNEMONIC='kitten warrior chaos sight wedding rhythm repair dawn also obvious novel oppose' npm run ganache\" \"npm run migrate\"",
-    "migrate": "rm -rf build && truffle migrate --reset --compile-all --network development"
+    "migrate": "rm -rf build && truffle migrate --reset --compile-all --network development",
+    "start:kovan": "concurrently \"npm run ganache:kovan\" \"npm run migrate\"",
+    "start:rinkeby": "concurrently \"npm run ganache:rinkeby\" \"npm run migrate\"",
+    "start:ropsten": "concurrently \"npm run ganache:ropsten\" \"npm run migrate\"",
+    "ganache:kovan": "npm run ganache -- --fork \"https://kovan.infura.io/v3/$INFURA_PROJECT_ID\"",
+    "ganache:rinkeby": "npm run ganache -- --fork \"https://rinkeby.infura.io/v3/$INFURA_PROJECT_ID\"",
+    "ganache:ropsten": "npm run ganache -- --fork \"https://ropsten.infura.io/v3/$INFURA_PROJECT_ID\"",
+    "lint:sol": "solium -d .",
+    "test": "concurrently \"npm run ganache\" \"npm run migrate && truffle test\" --kill-others --success first"
   },
   "config": {
     "ganache": {
