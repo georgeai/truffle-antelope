@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "truffle": "^5.3.0"
+  },
+  "devDependencies": {
+    "concurrently": "^6.0.0",
+    "ganache-cli": "^6.12.2"
+  },
+  "scripts": {
+    "ganache": "ganache-cli --networkId $npm_package_config_ganache_networkId --allowUnlimitedContractSize --gasLimit $npm_package_config_ganache_gasLimit --gasPrice $npm_package_config_ganache_gasPrice --mnemonic \"$MNEMONIC\" -h 0.0.0.0",
+    "start": "concurrently \"MNEMONIC='kitten warrior chaos sight wedding rhythm repair dawn also obvious novel oppose' npm run ganache\" \"npm run migrate\"",
+    "migrate": "rm -rf build && truffle migrate --reset --compile-all --network development"
+  },
+  "config": {
+    "ganache": {
+      "networkId": 3431,
+      "gasPrice": 25000000000,
+      "gasLimit": 6500000
+    }
+  }
+}
